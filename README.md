@@ -36,6 +36,16 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+### Live Supabase + xAI setup
+
+See [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md) for step-by-step instructions to enable:
+
+- real Supabase Auth (magic links)
+- Postgres persistence via Drizzle (`npm run db:push`)
+- live xAI/Grok generation
+
+Mock/dev fallback remains when env vars are missing.
+
 ### Environment variables
 
 | Variable | Required | Notes |

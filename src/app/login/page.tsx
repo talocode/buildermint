@@ -29,7 +29,7 @@ export default function LoginPage() {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/dashboard`,
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
 
@@ -56,9 +56,11 @@ export default function LoginPage() {
           </LoadingButton>
         </form>
         {message ? <p className="mt-4 text-sm text-slate-400">{message}</p> : null}
-        <p className="mt-6 text-sm text-slate-500">
-          Dev mode? <Link href="/dashboard" className="text-emerald-400">Open dashboard</Link>
-        </p>
+        {!process.env.NEXT_PUBLIC_SUPABASE_URL ? (
+          <p className="mt-6 text-sm text-slate-500">
+            Dev mode? <Link href="/dashboard" className="text-emerald-400">Open dashboard</Link>
+          </p>
+        ) : null}
       </Card>
     </div>
   );

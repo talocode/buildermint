@@ -17,22 +17,27 @@ export function isSupabaseConfigured() {
   );
 }
 
+export function shouldUseDevAuthFallback() {
+  return !isSupabaseConfigured() && process.env.NODE_ENV === "development";
+}
+
 export async function getCurrentUser(): Promise<AuthUser | null> {
+  if (shouldUseDevAuthFallback()) {
+    return DEV_USER;
+  }
+
   if (!isSupabaseConfigured()) {
-    if (process.env.NODE_ENV === "development") {
-      return DEV_USER;
-    }
     return null;
   }
 
   const supabase = await createClient();
   if (!supabase) {
-    return process.env.NODE_ENV === "development" ? DEV_USER : null;
+    return null;
   }
 
-  const { data } = await supabase.auth.getUser();
-  if (!data.user) {
-    return process.env.NODE_ENV === "development" ? DEV_USER : null;
+  const { data, error } = await supabase.auth.getUser();
+  if (error || !data.user) {
+    return null;
   }
 
   return {

@@ -38,6 +38,19 @@ Drizzle tables:
 
 When `DATABASE_URL` is missing, development uses an in-memory store with the same service API.
 
+## Live mode
+
+When Supabase env vars are set:
+
+- Middleware protects `/dashboard/*` and redirects unauthenticated users to `/login`
+- Magic links complete at `/auth/callback`
+- Dev auth fallback is disabled
+- API routes return `401` without a valid session
+
+When `XAI_API_KEY` is set with `AI_PROVIDER=xai`, live Grok generation is used. Mock provider remains the fallback otherwise.
+
+See [SUPABASE_SETUP.md](./SUPABASE_SETUP.md).
+
 ## API routes
 
 - `POST /api/profile`

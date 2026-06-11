@@ -8,6 +8,8 @@ import {
   opportunitiesPrompt,
 } from "@/lib/prompts";
 
+import { wrapAIError } from "./errors";
+
 import type {
   AIProvider,
   BuildPlanOutput,
@@ -66,38 +68,50 @@ export class XAIProvider implements AIProvider {
   }
 
   async generateOpportunities(profile: SkillProfileInput): Promise<OpportunityIdea[]> {
-    const { object } = await generateObject({
-      model: this.model(),
-      schema: opportunitySchema,
-      prompt: opportunitiesPrompt(profile),
-    });
+    try {
+      const { object } = await generateObject({
+        model: this.model(),
+        schema: opportunitySchema,
+        prompt: opportunitiesPrompt(profile),
+      });
 
-    return object.ideas;
+      return object.ideas;
+    } catch (error) {
+      throw wrapAIError(error);
+    }
   }
 
   async generateBuildPlan(
     profile: SkillProfileInput,
     opportunity: OpportunityIdea,
   ): Promise<BuildPlanOutput> {
-    const { object } = await generateObject({
-      model: this.model(),
-      schema: buildPlanSchema,
-      prompt: buildPlanPrompt(profile, opportunity),
-    });
+    try {
+      const { object } = await generateObject({
+        model: this.model(),
+        schema: buildPlanSchema,
+        prompt: buildPlanPrompt(profile, opportunity),
+      });
 
-    return object;
+      return object;
+    } catch (error) {
+      throw wrapAIError(error);
+    }
   }
 
   async generateLaunchPlan(
     profile: SkillProfileInput,
     opportunity: OpportunityIdea,
   ): Promise<LaunchPlanOutput> {
-    const { object } = await generateObject({
-      model: this.model(),
-      schema: launchPlanSchema,
-      prompt: launchPlanPrompt(profile, opportunity),
-    });
+    try {
+      const { object } = await generateObject({
+        model: this.model(),
+        schema: launchPlanSchema,
+        prompt: launchPlanPrompt(profile, opportunity),
+      });
 
-    return object;
+      return object;
+    } catch (error) {
+      throw wrapAIError(error);
+    }
   }
 }

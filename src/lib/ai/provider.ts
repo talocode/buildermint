@@ -73,3 +73,11 @@ export function getAIProvider(): AIProvider {
 
   return new MockProvider();
 }
+
+export function getActiveAIModel(): string | null {
+  const provider = getAIProvider();
+  if (provider.name !== "xai") {
+    return null;
+  }
+  return process.env.XAI_MODEL ?? "grok-2-1212";
+}
